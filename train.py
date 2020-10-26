@@ -36,16 +36,16 @@ class LemmaTokenizer:
 
 def clean_data(inp_df):
     df_modified = inp_df[["OriginalTweet", "Sentiment"]].copy()
-    df_modified["OriginalTweet"] = df_modified["OriginalTweet"].astype("str")
+    df_modified.dropna(inplace=True)
     df_modified["OriginalTweet"] = df_modified["OriginalTweet"].str.lower().str.replace("[^a-zA-Z]","")
     count_vec = TfidfVectorizer(tokenizer = LemmaTokenizer(), token_pattern = None, ngram_range= (1, 2))
-    count_vec.fit(df_modified["OriginalTweet"])
-    df_modified["OriginalTweet"] = count_vec.transform(df_modified["OriginalTweet"])
+    
+    X = count_vec.fit_transform(df_modified["OriginalTweet"])
 
 
 
     df_modified["Sentiment"] = df_modified["Sentiment"].astype("str")
-    df_modified = df_modified[df_modified["Sentiment"] != "nan"].dropna()
+    df_modified = df_modified[df_modified["Sentiment"] != "nan"]
 
 
         
@@ -58,17 +58,17 @@ def clean_data(inp_df):
     df_modified["Sentiment"] = df_modified["Sentiment"].astype("int")
 
     labels = df_modified["Sentiment"]
-    del df_modified["Sentiment"]
+    
 
-    return df_modified, labels
+    return X, labels
 
-df_final, y = clean_data(df)
+x, y = clean_data(df)
 
 run = Run.get_context()
     
 
 
-x_train, x_test , y_train, y_test = train_test_split(df_final, y, test_size=20, random_state=42)
+x_train, x_test , y_train, y_test = train_test_split(x, y, test_size=0.20, random_state=42)
 
 #def main():
 # Add arguments to script
