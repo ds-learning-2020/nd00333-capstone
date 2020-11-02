@@ -1,8 +1,10 @@
 import json
 import numpy as np
 import os
-from sklearn.externals import joblib
+import joblib
 
+
+# Reference - https://docs.microsoft.com/en-us/azure/machine-learning/how-to-deploy-and-where?tabs=python#define-an-entry-script
 
 def init():
     global model
