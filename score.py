@@ -8,7 +8,9 @@ import joblib
 
 def init():
     global model
-    model_path = os.path.join(os.getenv(""), "model.pkl")
+    model_path = os.path.join(".", "model.pkl")
+    #model_path = "~/cloudfiles/code/Users/odl_user_124394/model.pkl"
+    model = joblib.load(model_path)
 
 def run(data):
     try:
