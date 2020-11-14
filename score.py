@@ -2,6 +2,7 @@ import json
 import numpy as np
 import os
 import joblib
+import pandas as pd
 
 
 # Reference - https://docs.microsoft.com/en-us/azure/machine-learning/how-to-deploy-and-where?tabs=python#define-an-entry-script
@@ -15,9 +16,10 @@ def init():
 
 def run(data):
     try:
-        data = np.array(json.loads(data))
+        #data = np.array(json.loads(data))
+        data = pd.DataFrame(json.loads(data))
         result = model.predict(data)
         return result.tolist()
     except Exception as e:
-        error = str(e)
+        error = str(e) + "\n" + "data:" + "\n" + str(json.loads(data))
         return error
